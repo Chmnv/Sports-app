@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sports Schedule</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>⚽ Sports Schedule</h1>
+
+  <section>
+    <h2>Matches</h2>
+    <div id="matches">Loading...</div>
+  </section>
+
+  <section>
+    <h2>Add Team</h2>
+    <input id="teamName" placeholder="Team name" />
+    <select id="sport">
+      <option value="football">Football</option>
+      <option value="volleyball">Volleyball</option>
+    </select>
+    <button onclick="addTeam()">Add Team</button>
+  </section>
+
+  <section>
+    <h2>Add Match</h2>
+    <select id="homeTeam"></select>
+    <span>vs</span>
+    <select id="awayTeam"></select>
+    <input type="datetime-local" id="matchDate" />
+    <button onclick="addMatch()">Add Match</button>
+  </section>
+
+  <section>
+    <h2>Update Result</h2>
+    <input id="matchId" placeholder="Match ID" type="number" />
+    <input id="homeScore" placeholder="Home score" type="number" />
+    <input id="awayScore" placeholder="Away score" type="number" />
+    <button onclick="updateResult()">Save Result</button>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
