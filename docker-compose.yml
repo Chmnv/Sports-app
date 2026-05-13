@@ -19,5 +19,9 @@ services:
       POSTGRES_DB: sportsdb
       POSTGRES_USER: user1
       POSTGRES_PASSWORD: password
+    volumes:
+      - db_data:/var/lib/postgresql/data
 
+volumes:
+  db_data:
 
