@@ -1,4 +1,4 @@
-const API = "http://192.168.49.2:31000";
+const API = "/api";
 
 async function loadMatches() {
   const res = await fetch(`${API}/matches/`);
