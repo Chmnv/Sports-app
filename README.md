@@ -1,69 +1,45 @@
 # Sports Schedule App
 
-A simple sports match scheduling app built with FastAPI, PostgreSQL, and Nginx. Deployed using Docker and Kubernetes.
+Pet project for learning Docker and Kubernetes. Simple app for scheduling sports matches and tracking results.
 
-## Architecture
+## Stack
 
-```
-Frontend (Nginx) → Backend (FastAPI) → Database (PostgreSQL)
-```
+- FastAPI + PostgreSQL (backend)
+- HTML/CSS/JS + Nginx (frontend)
+- Kubernetes + Nginx Ingress (deployment)
 
-## Tech Stack
-
-- **Frontend:** HTML, CSS, JavaScript (Nginx)
-- **Backend:** Python, FastAPI
-- **Database:** PostgreSQL
-- **Containerization:** Docker
-- **Orchestration:** Kubernetes (Minikube)
-
-## Prerequisites
+## Requirements
 
 - Docker
 - Minikube
 - kubectl
 
-## Run with Kubernetes
+## Run
 
-> Note: The frontend currently communicates with the backend using a NodePort service for local Minikube development. This will later be replaced with Ingress/reverse proxy routing.
-
-**1. Start Minikube:**
 ```bash
+# Start minikube and enable ingress
 minikube start
-```
+minikube addons enable ingress
 
-**2. Get your Minikube IP:**
-```bash
-minikube ip
-```
-
-**3. Update the API URL in `frontend/app.js`:**
-```javascript
-const API = "http://<MINIKUBE_IP>:31000";
-```
-
-**4. Build Docker images:**
-```bash
+# Build images
 docker build -t sports-backend ./backend
 docker build -t sports-frontend ./frontend
-```
 
-**5. Deploy to Kubernetes:**
-```bash
+# Deploy
 kubectl apply -f k8s/
+
+# Get IP and open in browser
+minikube ip
+# open http://
 ```
 
-**6. Open the app:**
-```bash
-minikube service frontend-service
-```
-
-## Stop the app
+## Stop
 
 ```bash
 kubectl delete -f k8s/
 ```
 
-## Project Structure
+## Structure
 
 ```
 sports-app/
@@ -84,5 +60,6 @@ sports-app/
     ├── frontend-deployment.yaml
     ├── frontend-service.yaml
     ├── db-deployment.yaml
-    └── db-service.yaml
+    ├── db-service.yaml
+    └── ingress.yaml
 ```
