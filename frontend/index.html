@@ -2,80 +2,117 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Football Schedule</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sports Schedule</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <span class="logo">⚽</span>
-    <h1>Football Schedule</h1>
+  <header class="site-header">
+    <svg class="logo-icon" viewBox="0 0 40 40" aria-hidden="true">
+      <circle cx="20" cy="20" r="18" fill="#1e3a5f" stroke="#3b82f6" stroke-width="2"/>
+      <path d="M8 20h24M20 8c-4 6-4 18 0 24M20 8c4 6 4 18 0 24" stroke="#3b82f6" stroke-width="1.5" fill="none"/>
+    </svg>
+    <div class="header-text">
+      <h1>Sports Schedule</h1>
+      <p>Match fixtures, results &amp; league standings</p>
+    </div>
   </header>
 
-  <div class="container">
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('matches')">Matches</button>
-      <button class="tab" onclick="showTab('standings')">Standings</button>
-      <button class="tab" onclick="showTab('manage')">Manage</button>
+  <main class="container">
+    <div id="alertBox" class="alert" role="alert" aria-live="polite"></div>
+
+    <div class="tabs" role="tablist" aria-label="Main navigation">
+      <button type="button" class="tab active" role="tab" data-tab="matches" aria-selected="true" aria-controls="matches" id="tab-matches">Matches</button>
+      <button type="button" class="tab" role="tab" data-tab="standings" aria-selected="false" aria-controls="standings" id="tab-standings">Standings</button>
+      <button type="button" class="tab" role="tab" data-tab="manage" aria-selected="false" aria-controls="manage" id="tab-manage">Manage</button>
     </div>
 
-    <!-- MATCHES -->
-    <div class="section active" id="matches">
-      <div id="matchList"></div>
-    </div>
-
-    <!-- STANDINGS -->
-    <div class="section" id="standings">
-      <table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Team</th>
-            <th>P</th>
-            <th>W</th>
-            <th>D</th>
-            <th>L</th>
-            <th>GF</th>
-            <th>GA</th>
-            <th>Pts</th>
-          </tr>
-        </thead>
-        <tbody id="standingsBody"></tbody>
-      </table>
-    </div>
-
-    <!-- MANAGE -->
-    <div class="section" id="manage">
-      <div class="card form-card">
-        <h3>Add Team</h3>
-        <div class="form-row">
-          <input id="teamName" placeholder="Team name" />
-          <button onclick="addTeam()">Add</button>
-        </div>
+    <section class="section active" id="matches" role="tabpanel" aria-labelledby="tab-matches">
+      <div id="matchList">
+        <div class="loading-state"><p>Loading matches…</p></div>
       </div>
+    </section>
 
-      <div class="card form-card">
-        <h3>Schedule Match</h3>
+    <section class="section" id="standings" role="tabpanel" aria-labelledby="tab-standings" hidden>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Team</th>
+              <th title="Played">P</th>
+              <th title="Won">W</th>
+              <th title="Drawn">D</th>
+              <th title="Lost">L</th>
+              <th title="Goals for">GF</th>
+              <th title="Goals against">GA</th>
+              <th title="Points">Pts</th>
+            </tr>
+          </thead>
+          <tbody id="standingsBody">
+            <tr><td colspan="9" class="loading-state"><p>Loading standings…</p></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="section" id="manage" role="tabpanel" aria-labelledby="tab-manage" hidden>
+      <article class="form-card">
+        <h3>Add team</h3>
         <div class="form-row">
-          <select id="homeTeam"></select>
+          <div class="form-field" style="flex: 2">
+            <label for="teamName">Team name</label>
+            <input class="input" id="teamName" type="text" placeholder="e.g. FC Tbilisi" autocomplete="off" />
+            <p class="form-error" id="teamNameError" aria-live="polite"></p>
+          </div>
+          <button type="button" class="btn btn--primary" id="btnAddTeam">Add team</button>
+        </div>
+        <div id="teamsList" class="teams-list" aria-label="Registered teams"></div>
+      </article>
+
+      <article class="form-card">
+        <h3>Schedule match</h3>
+        <div class="form-row">
+          <div class="form-field">
+            <label for="homeTeam">Home</label>
+            <select class="input" id="homeTeam"></select>
+          </div>
           <span class="vs">vs</span>
-          <select id="awayTeam"></select>
-          <input type="datetime-local" id="matchDate" />
-          <button onclick="addMatch()">Add</button>
+          <div class="form-field">
+            <label for="awayTeam">Away</label>
+            <select class="input" id="awayTeam"></select>
+          </div>
+          <div class="form-field">
+            <label for="matchDate">Date &amp; time</label>
+            <input class="input" type="datetime-local" id="matchDate" />
+          </div>
+          <button type="button" class="btn btn--primary" id="btnAddMatch">Schedule</button>
         </div>
-      </div>
+        <p class="form-error" id="matchFormError" aria-live="polite"></p>
+      </article>
 
-      <div class="card form-card">
-        <h3>Update Result</h3>
+      <article class="form-card">
+        <h3>Update result</h3>
         <div class="form-row">
-          <select id="matchSelect"></select>
-          <input id="homeScore" placeholder="Home" type="number" min="0" />
+          <div class="form-field" style="flex: 2">
+            <label for="matchSelect">Match</label>
+            <select class="input" id="matchSelect"></select>
+          </div>
+          <div class="form-field" style="max-width: 5rem">
+            <label for="homeScore">Home</label>
+            <input class="input" id="homeScore" type="number" min="0" placeholder="0" />
+          </div>
           <span class="vs">:</span>
-          <input id="awayScore" placeholder="Away" type="number" min="0" />
-          <button class="btn-green" onclick="updateResult()">Save</button>
+          <div class="form-field" style="max-width: 5rem">
+            <label for="awayScore">Away</label>
+            <input class="input" id="awayScore" type="number" min="0" placeholder="0" />
+          </div>
+          <button type="button" class="btn btn--success" id="btnSaveResult">Save result</button>
         </div>
-      </div>
-    </div>
-  </div>
+        <p class="form-error" id="resultFormError" aria-live="polite"></p>
+      </article>
+    </section>
+  </main>
 
   <script src="app.js"></script>
 </body>
